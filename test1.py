@@ -44,7 +44,37 @@ sns.scatterplot(data=hd[hd['age'].between(10,70)], x='maximum_heart_rate', y='ag
 
 from scipy import stats
 
-print(stats.pearsonr(hd['maximum_heart_rate'], hd['age']))
+#print(stats.pearsonr(hd['maximum_heart_rate'], hd['age']))
+
+
+#Classifier
+from sklearn.ensemble import RandomForestClassifier # import sklearn
+from sklearn.metrics import accuracy_score
+
+clf = RandomForestClassifier(n_estimators=100, random_state=0) 
+
+
+hrd=hd.sample(frac=1)
+train= hrd[:240]
+test= hrd[240:303]
+print('Train: ' + str(len(train)) + ' Test: ' + str(len(test)) )
+
+training_observed= train.drop('target', axis=1)
+training_labels=train['target']
+
+clf.fit(training_observed, training_labels)
+
+
+test_observed = test.drop('target', axis=1)
+pred= clf.predict(test_observed)
+
+print(pred)
+
+test_labels=test['target']
+accuracy_score=accuracy_score(test_labels, pred)
+print(accuracy_score)
+
+
 
 
 # age: The person's age in years
